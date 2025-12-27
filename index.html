@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>חדר הסוכריות הקופצות - מפעל הממתקים</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* מכולה ששומרת בקפדנות על יחס 16:9 */
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 56.25vw; /* גובה מבוסס רוחב ליחס 16:9 */
+            max-height: 100vh;
+            max-width: 177.78vh; /* רוחב מבוסס גובה ליחס 16:9 */
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            border-radius: 2vmin;
+            box-shadow: 0 2vmin 6vmin rgba(0,0,0,0.3);
+            padding: 2.5vmin; /* הוקטן מעט */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .candy-float {
+            position: absolute;
+            font-size: 4vmin;
+            animation: float 4s ease-in-out infinite;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-2vmin) rotate(10deg); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 1.5vmin;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 4.5vmin;
+            color: #6c5ce7;
+            text-shadow: 0.2vmin 0.2vmin 0.4vmin rgba(0,0,0,0.2);
+            margin-bottom: 0.5vmin;
+        }
+
+        .header p {
+            font-size: 2.2vmin;
+            color: #2d3436;
+        }
+
+        .workspace {
+            flex: 1;
+            display: flex;
+            gap: 2vmin;
+            z-index: 10;
+            min-height: 0; /* חשוב למניעת גלילה */
+        }
+
+        .boxes-area {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            gap: 2vmin;
+        }
+
+        .box-container {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 2vmin;
+            padding: 1.5vmin;
+            box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 0.4vmin solid #a29bfe;
+            position: relative;
+        }
+
+        .box-title {
+            font-size: 2.5vmin;
+            color: #6c5ce7;
+            font-weight: bold;
+            margin-bottom: 1vmin;
+        }
+
+        .candies-display {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5vmin;
+            justify-content: center;
+            align-content: center;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .candy {
+            font-size: 3vmin;
+            line-height: 1;
+            transition: transform 0.3s;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .candy:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        .calculation-area {
+            flex: 0.8;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 2vmin;
+            padding: 2vmin;
+            box-shadow: 0 1vmin 2vmin rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            border: 0.4vmin solid #fd79a8;
+        }
+
+        .calculation-title {
+            font-size: 3vmin;
+            color: #e17055;
+            font-weight: bold;
+            margin-bottom: 1vmin;
+            text-align: center;
+        }
+
+        .info-text {
+            text-align: center;
+            margin-bottom: 1.5vmin;
+            font-size: 2.2vmin;
+            color: #2d3436;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 1.5vmin;
+            margin-bottom: 1.5vmin;
+            font-size: 3vmin;
+            justify-content: center;
+        }
+
+        .number-input {
+            width: 9vmin;
+            height: 6vmin;
+            font-size: 3.5vmin;
+            text-align: center;
+            border: 0.3vmin solid #fd79a8;
+            border-radius: 1vmin;
+            font-weight: bold;
+            color: #e17055;
+            padding: 0;
+        }
+
+        .number-input:focus {
+            outline: none;
+            border-color: #6c5ce7;
+            box-shadow: 0 0 1vmin rgba(108, 92, 231, 0.3);
+        }
+
+        .calculate-btn {
+            background: linear-gradient(135deg, #fd79a8 0%, #e17055 100%);
+            color: white;
+            border: none;
+            padding: 1.5vmin 4vmin;
+            font-size: 2.5vmin;
+            border-radius: 1.5vmin;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 1vmin;
+            box-shadow: 0 0.5vmin 1.5vmin rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            white-space: nowrap;
+        }
+
+        .calculate-btn:hover {
+            transform: translateY(-0.3vmin);
+        }
+
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            font-size: 3vmin;
+            color: #00b894;
+            font-weight: bold;
+            min-height: 6vmin; /* שמירת מקום לתוצאה */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 1vmin 0;
+            line-height: 1.2;
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            border: none;
+            padding: 1vmin 3vmin;
+            font-size: 2vmin;
+            border-radius: 1vmin;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0.5vmin 1.5vmin rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-0.3vmin);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Floating candies decoration -->
+        <div class="candy-float" style="top: 5%; right: 10%;">🍬</div>
+        <div class="candy-float" style="top: 15%; left: 8%; animation-delay: 1s;">🍭</div>
+        <div class="candy-float" style="bottom: 10%; right: 15%; animation-delay: 2s;">🍬</div>
+        <div class="candy-float" style="bottom: 20%; left: 12%; animation-delay: 1.5s;">🍭</div>
+        <div class="candy-float" style="top: 40%; right: 5%; animation-delay: 0.5s;">🍬</div>
+
+        <div class="header">
+            <h1>🍬 חֶדֶר הַסֻּכָּרִיּוֹת הַקּוֹפְצוֹת 🍬</h1>
+            <p>עִזְרוּ לִפְרוֹפֵסוֹר סֻכָּרוֹבִיץ לִסְפּוֹר אֶת הַסֻּכָּרִיּוֹת!</p>
+        </div>
+
+        <div class="workspace">
+            <div class="boxes-area">
+                <div class="box-container">
+                    <div class="box-title">📦 קֻפְסָה רִאשׁוֹנָה (18)</div>
+                    <div class="candies-display" id="box1"></div>
+                </div>
+
+                <div class="box-container">
+                    <div class="box-title">📦 קֻפְסָה שְׁנִיָּה (+6)</div>
+                    <div class="candies-display" id="box2"></div>
+                </div>
+            </div>
+
+            <div class="calculation-area">
+                <div class="calculation-title">💭 בּוֹאוּ נַחְשֹׁב יַחַד!</div>
+                
+                <div class="info-text">
+                    <strong>בַּקֻּפְסָה הָרִאשׁוֹנָה:</strong> 18 סֻכָּרִיּוֹת<br>
+                    <strong>בַּקֻּפְסָה הַשְּׁנִיָּה:</strong> 6 סֻכָּרִיּוֹת <strong>יוֹתֵר</strong>
+                </div>
+
+                <div class="input-group">
+                    <input type="number" class="number-input" id="num1" value="18" readonly style="background: #f0f0f0; cursor: not-allowed;">
+                    <span style="color: #e17055; font-weight: bold;">➕</span>
+                    <input type="number" class="number-input" id="num2" placeholder="?" min="0">
+                    <span style="color: #e17055; font-weight: bold;">=</span>
+                    <input type="number" class="number-input" id="result" placeholder="?" min="0">
+                </div>
+
+                <button class="calculate-btn" onclick="calculate()">🧮 חַשְּׁבוּ!</button>
+                <div class="result" id="resultMessage"></div>
+                <button class="reset-btn" onclick="reset()">🔄 הַתְחֵל מֵחָדָשׁ</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize boxes with candies
+        function initializeBoxes() {
+            const box1 = document.getElementById('box1');
+            const box2 = document.getElementById('box2');
+            
+            // Box 1: 18 candies
+            box1.innerHTML = '';
+            for (let i = 0; i < 18; i++) {
+                createCandy(box1, '🍬', i * 0.05);
+            }
+
+            // Box 2: 24 candies (18 + 6)
+            box2.innerHTML = '';
+            for (let i = 0; i < 24; i++) {
+                // First 18 are same color/type
+                if (i < 18) {
+                    createCandy(box2, '🍬', i * 0.05);
+                } else {
+                    // Last 6 are distinctive
+                    createCandy(box2, '🍭', (i * 0.05) + 1, true);
+                }
+            }
+        }
+
+        function createCandy(container, char, delay, isNew = false) {
+            const candy = document.createElement('span');
+            candy.className = 'candy';
+            candy.textContent = char;
+            candy.style.animation = `float 3s ease-in-out infinite`;
+            candy.style.animationDelay = `${delay}s`;
+            if (isNew) {
+                candy.style.filter = "drop-shadow(0 0 2px gold)";
+                candy.style.transform = "scale(1.1)";
+            }
+            container.appendChild(candy);
+        }
+
+        function calculate() {
+            const num2 = parseInt(document.getElementById('num2').value);
+            const result = parseInt(document.getElementById('result').value);
+            const resultMessage = document.getElementById('resultMessage');
+
+            if (isNaN(num2) || isNaN(result)) {
+                resultMessage.textContent = '❌ נָא לְמַלֵּא אֶת כָּל הַמִּסְפָּרִים';
+                resultMessage.style.color = '#d63031';
+                return;
+            }
+
+            if (num2 === 6 && result === 24) {
+                resultMessage.innerHTML = '🎉 כָּל הַכָּבוֹד! תְּשׁוּבָה נְכוֹנָה!<br>18 + 6 = 24 סֻכָּרִיּוֹת!';
+                resultMessage.style.color = '#00b894';
+                
+                // Celebration animation
+                celebrate();
+            } else {
+                resultMessage.innerHTML = '❌ לֹא בְּדִיּוּק. נַסּוּ שׁוּב!<br><small>(רֶמֶז: כַּמָּה יוֹתֵר יֵשׁ בַּקֻּפְסָה הַשְּׁנִיָּה?)</small>';
+                resultMessage.style.color = '#d63031';
+            }
+        }
+
+        function celebrate() {
+            const container = document.querySelector('.container');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.textContent = ['🍬', '🍭', '✨', '⭐', '🎉'][Math.floor(Math.random() * 5)];
+                particle.style.position = 'absolute';
+                particle.style.fontSize = Math.random() * 4 + 2 + 'vmin';
+                particle.style.left = '50%';
+                particle.style.top = '50%';
+                particle.style.transform = 'translate(-50%, -50%)';
+                particle.style.zIndex = '1000';
+                particle.style.transition = 'all 1s ease-out';
+                particle.style.opacity = '1';
+                
+                container.appendChild(particle);
+
+                // Animate out
+                setTimeout(() => {
+                    const angle = Math.random() * Math.PI * 2;
+                    const velocity = Math.random() * 40 + 20;
+                    particle.style.left = (50 + Math.cos(angle) * velocity) + '%';
+                    particle.style.top = (50 + Math.sin(angle) * velocity) + '%';
+                    particle.style.opacity = '0';
+                    particle.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 360}deg)`;
+                }, 50);
+                
+                setTimeout(() => particle.remove(), 1050);
+            }
+        }
+
+        function reset() {
+            document.getElementById('num2').value = '';
+            document.getElementById('result').value = '';
+            document.getElementById('resultMessage').textContent = '';
+        }
+
+        // Initialize on load
+        window.onload = initializeBoxes;
+    </script>
+</body>
+</html>
