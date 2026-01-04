@@ -41,14 +41,8 @@
         .candy-float {
             position: absolute;
             font-size: 4vmin;
-            animation: float 4s ease-in-out infinite;
             opacity: 0.6;
             pointer-events: none;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-2vmin) rotate(10deg); }
         }
 
         .header {
@@ -66,8 +60,11 @@
         }
 
         .header p {
-            font-size: 2.2vmin;
+            font-size: 2vmin;
             color: #2d3436;
+            max-width: 90%;
+            margin: 0 auto;
+            line-height: 1.3;
         }
 
         .workspace {
@@ -249,7 +246,11 @@
 
         <div class="header">
             <h1>🍬 חֶדֶר הַסֻּכָּרִיּוֹת הַקּוֹפְצוֹת 🍬</h1>
-            <p>עִזְרוּ לִפְרוֹפֵסוֹר סֻכָּרוֹבִיץ לִסְפּוֹר אֶת הַסֻּכָּרִיּוֹת!</p>
+            <p>
+                פְּרוֹפֵסוֹר סֻכָּרוֹבִיץ בָּדַק שְׁתֵּי קֻפְסָאוֹת שֶׁל סֻכָּרִיּוֹת קוֹפְצוֹת.<br>
+                בַּקֻּפְסָה הָרִאשׁוֹנָה הָיוּ 18 סֻכָּרִיּוֹת קוֹפְצוֹת. בַּקֻּפְסָה הַשְּׁנִיָּה הָיוּ 6 סֻכָּרִיּוֹת קוֹפְצוֹת יוֹתֵר מֵאֲשֶׁר בַּקֻּפְסָה הָרִאשׁוֹנָה.<br>
+                <strong>כַּמָּה סֻכָּרִיּוֹת קוֹפְצוֹת הָיוּ בַּקֻּפְסָה הַשְּׁנִיָּה?</strong>
+            </p>
         </div>
 
         <div class="workspace">
@@ -317,8 +318,7 @@
             const candy = document.createElement('span');
             candy.className = 'candy';
             candy.textContent = char;
-            candy.style.animation = `float 3s ease-in-out infinite`;
-            candy.style.animationDelay = `${delay}s`;
+            
             if (isNew) {
                 candy.style.filter = "drop-shadow(0 0 2px gold)";
                 candy.style.transform = "scale(1.1)";
